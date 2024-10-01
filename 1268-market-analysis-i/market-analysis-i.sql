@@ -1,16 +1,10 @@
 # Write your MySQL query statement below
-select  
+select 
     user_id as buyer_id,
-    join_date,
-    ifnull(orders_count,0) as orders_in_2019
+    u.join_date, 
+    ifnull(count(o.order_date),0) as orders_in_2019
 from Users u
-left join 
-    (select 
-        user_id, 
-        count(*) as orders_count
-    from Users u
-    join Orders o 
-    on u.user_id = o.buyer_id
-    where substr(o.order_date,1,4) = '2019'
-    group by user_id) temp 
-using(user_id)
+left join Orders o 
+    on u.user_id = o.buyer_id 
+    and o.order_date like '2019%'
+group by user_id
