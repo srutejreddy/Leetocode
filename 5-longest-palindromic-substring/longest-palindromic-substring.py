@@ -1,26 +1,21 @@
 class Solution:
     def longestPalindrome(self, s: str) -> str:
         N = len(s)
-        res = ""
-        maxLen = 0
+        start, end = 0, 0 
+
+        def LP(l,r):
+            while l>=0 and r<N and s[l]==s[r]:
+                l-=1
+                r+=1
+            return l+1, r
 
         for i in range(N):
-            l, r = i, i
-            while l>=0 and r<N and s[l]==s[r]:
-                currLen = r-l+1
-                if currLen>maxLen:
-                    res = s[l:r+1]
-                    maxLen = currLen
-                l-=1
-                r+=1
+            l, r = LP(i, i)
+            if r-l > end-start:
+                start, end = l, r
             
-            l, r = i, i+1
-            while l>=0 and r<N and s[l]==s[r]:
-                currLen = r-l+1
-                if currLen>maxLen:
-                    res = s[l:r+1]
-                    maxLen = currLen
-                l-=1
-                r+=1
+            l, r = LP(i, i+1)
+            if r-l > end-start:
+                start, end = l,r
 
-        return res
+        return s[start: end]
